@@ -22,6 +22,20 @@ public class PaymentAmount :ValueObject
 
         return Result.Success(new PaymentAmount(amount));
     }
+
+    public static PaymentAmount FromLinePosition(IList<ShiftLineItem> positions)
+    {
+        if (positions == null || positions.Count == 0)
+        {
+            throw new InvalidCastException("Empty line positions");
+        }
+        
+        var positionsAmountRaw = positions.Sum(ex => ex.Quantity * ex.UnitPrice);
+        
+        var targetAmount = Math.Floor(positionsAmountRaw);
+        
+        return new PaymentAmount(targetAmount);
+    }
     
     protected override IEnumerable<object> GetEqualityComponents()
     {
