@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Aggregates\Payout\" />
       <Folder Include="Common\" />
     </ItemGroup>
 

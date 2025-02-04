@@ -10,18 +10,17 @@ namespace Domain;
 
 public class Payment
 {
-    private readonly List<ShiftLineItem> _items = new();
     private readonly List<PaymentEvent> _events = new();
     
     public Guid? Id { get; private set; }
+    
+    public PaymentAmount Amount { get; private set; }
     
     public long InitVersion { get; protected set; } = -1;
     public IReadOnlyList<PaymentEvent> Events => _events;
     
     public PaymentState State { get; protected set; } = PaymentState.Initial;
     public PaymentType PaymentType { get; protected set; }
-    public IReadOnlyList<ShiftLineItem> Items { get; protected set; } = [];
-    
     
     public Payment()
     {
@@ -33,7 +32,6 @@ public class Payment
         Id = snapshot.Id;
         InitVersion = snapshot.Version;
         PaymentType = snapshot.Type;
-        _items = snapshot.Items;
         State = snapshot.State;
     }
     
@@ -130,14 +128,15 @@ public class Payment
         return Result.Success().WithEvent([eventData]);
     }
 
-    public ResultWithEvent Process(ChangePaymentItems command)
+    public ResultWithEvent Process(ChangePaymentAmount command)
     {
-        if (State == PaymentState.Commited || State == PaymentState.Rejected || State == PaymentState.Canceled)
+        if (State != PaymentState.Wait_Capture)
         {
-            return Result.Failure("payment ended").AsFailureWithoutEvent();
+            return Result.Failure("Payment unchangable in current state").AsFailureWithoutEvent();
         }
 
         throw new NotImplementedException();
+
     }
     public ResultWithEvent Process(CapturePayment command)
     {

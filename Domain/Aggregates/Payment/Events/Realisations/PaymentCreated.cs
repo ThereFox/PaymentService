@@ -8,14 +8,10 @@ public class PaymentCreated : PaymentEvent
     public PaymentType Type { get; init; }
     public PaymentAmount Amount { get; init; }
     
-    public PaymentCreated(Guid changedEntityId, PaymentType type, PaymentAmount amount) : base(changedEntityId, DateTime.UtcNow)
+    public PaymentCreated(Guid changedEntityId, PaymentType type, PaymentAmount amount) : base(changedEntityId)
     {
         Type = type;
         Amount = amount;
     }
-    public PaymentCreated(Guid changedEntityId, DateTime happenDateTime, PaymentType type, PaymentAmount amount) : base(changedEntityId, happenDateTime)
-    {
-        Type = type;
-        Amount = amount;
-    }
+
 }

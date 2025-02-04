@@ -6,13 +6,9 @@ public class PaymentInitialised : PaymentEvent
 {
     public Guid OrderId { get; init; }
     
-    public PaymentInitialised(Guid orderId, Guid changedEntityId) : base(changedEntityId, DateTime.UtcNow)
+    public PaymentInitialised(Guid orderId, Guid changedEntityId) : base(changedEntityId)
     {
         OrderId = orderId;
     }
     
-    public PaymentInitialised(Guid orderId, Guid changedEntityId, DateTime happenDateTime) : base(changedEntityId, happenDateTime)
-    {
-        OrderId = orderId;
-    }
 }

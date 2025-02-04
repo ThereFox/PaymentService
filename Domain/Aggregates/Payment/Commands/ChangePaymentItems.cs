@@ -1,7 +1,6 @@
 namespace Domain.Commands;
 
-public record ChangePaymentItems(
-    Guid id,
-    decimal unitPrice,
-    int quantity
+public record ChangePaymentAmount(
+    decimal newAmount,
+    string reason
 );
