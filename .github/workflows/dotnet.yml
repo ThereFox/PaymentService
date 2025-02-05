@@ -36,4 +36,4 @@ jobs:
         file: ./API/Dockerfile
         push: true
         context: .
-        tag: v1
+        tags: v1
