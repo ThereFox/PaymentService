@@ -11,9 +11,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -26,3 +24,15 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: docker setup
+      uses: docker/setup-buildx-action@v3.8.0
+    - name: docker build
+      run: docker build --file /API/Dockerfile .
+    - name: image push
+      run: docker build --file /API/Dockerfile .
+        
