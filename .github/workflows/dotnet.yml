@@ -35,5 +35,3 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
     - uses: docker/build-push-action@v6.13.0
-          
-        
