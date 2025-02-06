@@ -40,4 +40,4 @@ jobs:
         file: ./API/Dockerfile
         push: true
         context: .
-        tags: v1.0
+        tags: payapp:v1.0
