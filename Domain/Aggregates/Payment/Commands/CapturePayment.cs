@@ -1,6 +1,6 @@
 namespace Domain.Commands;
 
-public class CapturePayment
+public record CapturePayment
 (
-    DateTime When
+    decimal Amount
 );

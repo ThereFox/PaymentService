@@ -22,6 +22,8 @@ public class Payment
     public PaymentState State { get; protected set; } = PaymentState.Initial;
     public PaymentType PaymentType { get; protected set; }
     
+    public CardInfo CardForCredit { get; protected set; }
+    
     public Payment()
     {
         
@@ -31,6 +33,7 @@ public class Payment
     {
         Id = snapshot.Id;
         InitVersion = snapshot.Version;
+        CardForCredit = snapshot.Card;
         PaymentType = snapshot.Type;
         State = snapshot.State;
     }
@@ -39,6 +42,7 @@ public class Payment
     {
         State = PaymentState.Created;
         PaymentType = @event.Type;
+        CardForCredit = @event.Card;
         _events.Add(@event);
     }
     public void Apply(PaymentInitialised @event)
@@ -68,6 +72,7 @@ public class Payment
     public void Apply(PaymentCaptured @event)
     {
         State = PaymentState.Commited;
+        Amount = PaymentAmount.Create(@event.Amount).Value;
         _events.Add(@event);
     }
     
@@ -90,6 +95,26 @@ public class Payment
         
         return Result.Success().WithEvent([createdEvent]);
     }
+    
+    public ResultWithEvent Process(CreateTwoFasePayment command)
+    {
+        if (State != PaymentState.Initial)
+        {
+            return Result.Failure("Is not initial state for create payment").AsFailureWithoutEvent();
+        }
+        
+        var validateAmount = PaymentAmount.Create(command.DefaultAmount);
+
+        if (validateAmount.IsFailure)
+        {
+            return Result.Failure(validateAmount.Error).AsFailureWithoutEvent();
+        }
+        
+        var createdEvent = new PaymentCreated(Guid.NewGuid(), PaymentType.TwoState, validateAmount.Value);
+        
+        return Result.Success().WithEvent([createdEvent]);
+    }
+    
     public ResultWithEvent Process(InitialisePayment command)
     {
         if (State == PaymentState.Initial)
@@ -127,17 +152,7 @@ public class Payment
 
         return Result.Success().WithEvent([eventData]);
     }
-
-    public ResultWithEvent Process(ChangePaymentAmount command)
-    {
-        if (State != PaymentState.Wait_Capture)
-        {
-            return Result.Failure("Payment unchangable in current state").AsFailureWithoutEvent();
-        }
-
-        throw new NotImplementedException();
-
-    }
+    
     public ResultWithEvent Process(CapturePayment command)
     {
         if (State != PaymentState.Wait_Capture)
@@ -145,7 +160,7 @@ public class Payment
             return Result.Failure("Payment dont wait capture").AsFailureWithoutEvent();
         }
 
-        var eventData = new PaymentCaptured(Id.Value);
+        var eventData = new PaymentCaptured(Id.Value, command.Amount);
 
         return Result.Success().WithEvent([eventData]);
     }

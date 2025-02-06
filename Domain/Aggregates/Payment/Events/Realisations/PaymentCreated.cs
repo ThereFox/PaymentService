@@ -7,6 +7,7 @@ public class PaymentCreated : PaymentEvent
 {
     public PaymentType Type { get; init; }
     public PaymentAmount Amount { get; init; }
+    public CardInfo Card { get; init; }
     
     public PaymentCreated(Guid changedEntityId, PaymentType type, PaymentAmount amount) : base(changedEntityId)
     {

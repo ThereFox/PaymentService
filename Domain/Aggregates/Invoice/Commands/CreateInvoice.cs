@@ -4,6 +4,6 @@ namespace Domain.Aggregates.Invoice.Commands;
 
 public class CreateInvoice
 {
-    public List<InvoiceLineItem> Items { get; set; }
-    public Guid OrderId { get; private set; }
+    public List<InvoiceLineItem> Items { get; init; }
+    public Guid OrderId { get; init; }
 }

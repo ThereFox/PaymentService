@@ -1,6 +1,6 @@
 namespace Domain.ValueObjects;
 
-public class CardInfo
+public class CardActivaDate
 {
     
 }
