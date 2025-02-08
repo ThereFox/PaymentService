@@ -6,6 +6,8 @@
     build:
       context: .
       dockerfile: API/Dockerfile
+    networks:
+      - default
     labels:
       - "com.prometheus.enable=true"
       - "com.prometheus.port=55555"
@@ -20,6 +22,8 @@
       - --web.enable-remote-write-receiver
       - --enable-feature=native-histograms
       - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - default
         
   grafana:
     image: grafana/grafana:11.2.1
@@ -33,3 +37,29 @@
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana/dashboards:/var/lib/grafana/dashboards
+      
+
+  alertmanager:
+    image: prom/alertmanager:v0.21.0
+    user: root
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+    container_name: alertmanager
+    hostname: alertmanager
+    environment:
+      TZ: "Europe/Moscow"
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/etc/alertmanager/data'
+    networks:
+      - default
+        
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16

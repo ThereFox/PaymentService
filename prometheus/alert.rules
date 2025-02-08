@@ -1,0 +1,11 @@
+groups:
+- name: bot_test
+  rules:
+  - alert: Test
+    expr: up == 0
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Application throw many errors at moment"
+      description: "VALUE = {{ $value }}  LABELS: {{ $labels }}"
