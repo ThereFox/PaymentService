@@ -18,11 +18,24 @@ public class Invoice
     public InvoiceState State { get; private set; }
     public IReadOnlyCollection<InvoiceLineItem> Items => _items;
     public IReadOnlyList<DomainEvent> Events => _events;
+
+    public int InitVersion { get; private set; } = 0;
+    public int CurrentVersion => _events.Count;
     
     public Guid? OrderId { get; private set; }
 
     public Invoice()
     {
+        
+    }
+
+    public void Load(IList<DomainEvent> events)
+    {
+        InitVersion = events.Count;
+        foreach (var eventData in events)
+        {
+            Apply((dynamic)eventData);
+        }
         
     }
     
