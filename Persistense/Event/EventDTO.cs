@@ -7,5 +7,4 @@ public class EventDTO
     public int AggregateType { get; set; }
     public string Data { get; set; }
     public Guid EntityId { get; set; }
-    
 }

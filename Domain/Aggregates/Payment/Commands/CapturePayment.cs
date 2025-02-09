@@ -1,6 +1,5 @@
 namespace Domain.Commands;
 
-public record CapturePayment
-(
+public record CapturePayment(
     decimal Amount
 );

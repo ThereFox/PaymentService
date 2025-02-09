@@ -1,6 +1,5 @@
 namespace Domain.Commands;
 
-public record InitialisePayment
-(
+public record InitialisePayment(
     Guid OrderId
 );

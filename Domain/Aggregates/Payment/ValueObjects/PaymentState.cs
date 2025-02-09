@@ -13,16 +13,16 @@ public class PaymentState : ValueObject
     public static PaymentState Rejected => new PaymentState(6);
     public static PaymentState Returned => new PaymentState(7);
 
-    
+
     public int Id { get; init; }
 
     private static List<PaymentState> _allStates = [Created, Commited, Rejected];
-    
+
     private PaymentState(int id)
     {
         Id = id;
     }
-    
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         throw new NotImplementedException();

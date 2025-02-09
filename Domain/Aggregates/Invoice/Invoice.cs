@@ -13,7 +13,7 @@ public class Invoice
 
     private readonly List<DomainEvent> _events;
     private List<InvoiceLineItem> _items;
-    
+
     public Guid? Id { get; private set; }
     public InvoiceState State { get; private set; }
     public IReadOnlyCollection<InvoiceLineItem> Items => _items;
@@ -21,12 +21,11 @@ public class Invoice
 
     public int InitVersion { get; private set; } = 0;
     public int CurrentVersion => _events.Count;
-    
+
     public Guid? OrderId { get; private set; }
 
     public Invoice()
     {
-        
     }
 
     public void Load(IList<DomainEvent> events)
@@ -36,9 +35,8 @@ public class Invoice
         {
             Apply((dynamic)eventData);
         }
-        
     }
-    
+
     public void Apply(InvoiceCreated @event)
     {
         Id = @event.ChangedEntityId;
@@ -47,11 +45,13 @@ public class Invoice
         State = InvoiceState.Created;
         _events.Add(@event);
     }
+
     public void Apply(InvoiceApproved @event)
     {
         State = InvoiceState.Approved;
         _events.Add(@event);
     }
+
     public void Apply(InvoiceRejected @event)
     {
         State = InvoiceState.Rejected;
@@ -76,14 +76,15 @@ public class Invoice
         }
 
         return Result.Success().WithEvent(
-            [
-                new InvoiceCreated(
-                    Guid.NewGuid(),
-                    command.OrderId,
-                    command.Items.ToList()
-                    )
-            ]);
+        [
+            new InvoiceCreated(
+                Guid.NewGuid(),
+                command.OrderId,
+                command.Items.ToList()
+            )
+        ]);
     }
+
     public ResultWithEvent Process(RejectInvoice command)
     {
         if (State != InvoiceState.Created)
@@ -93,6 +94,7 @@ public class Invoice
 
         return Result.Success().WithEvent([new InvoiceRejected(Id.Value)]);
     }
+
     public ResultWithEvent Process(ApproveInvoice command)
     {
         if (State != InvoiceState.Created)

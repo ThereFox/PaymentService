@@ -15,7 +15,7 @@ public class InvoiceState : ValueObject
     {
         Id = id;
     }
-    
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Id;

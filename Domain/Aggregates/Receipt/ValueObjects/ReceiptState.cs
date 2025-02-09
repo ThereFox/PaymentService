@@ -11,13 +11,13 @@ public class ReceiptState : ValueObject
     public static ReceiptState Sended => new ReceiptState(4);
     public static ReceiptState Rejected => new ReceiptState(5);
 
-    
+
     public int Id { get; private set; }
 
     private ReceiptState(int id)
     {
         Id = id;
-    }    
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

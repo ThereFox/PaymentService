@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3" />
+        <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Aggregates\Payout\" />
-      <Folder Include="Common\" />
+        <Folder Include="Aggregates\Payout\"/>
+        <Folder Include="Common\"/>
     </ItemGroup>
 
 </Project>

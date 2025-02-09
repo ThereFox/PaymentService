@@ -10,7 +10,7 @@ public class CardSecureCode
     {
         Code = code;
     }
-    
+
     public static Result<CardSecureCode> Create(string code)
     {
         if (string.IsNullOrWhiteSpace(code))

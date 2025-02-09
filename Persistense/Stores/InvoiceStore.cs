@@ -18,20 +18,20 @@ public class InvoiceStore : IInvoiceStore
         SELECT COUNT(*) FROM Events
         Where EntityId = @Id
     ";
-    
+
     private const string GetEventsByIdSQL = @"
         SELECT * FROM Events
         Where EntityId = @Id
     ";
-    
+
     public async Task<Result<Invoice>> GetById(Guid id)
     {
         //get state ...
         var events = await _connection.QueryAsync<EventDTO>(GetEventsByIdSQL, new { Id = id });
-        
+
         var invoice = new Invoice();
         invoice.Load((dynamic)events.ToList());
-        
+
         return invoice;
     }
 
@@ -47,10 +47,11 @@ public class InvoiceStore : IInvoiceStore
         {
             return Result.Failure("Nothing was changed");
         }
-        
+
         var transaction = _connection.BeginTransaction();
-        
-        var versionInDb = await _connection.ExecuteScalarAsync<int>(GetEventsCountSQL, new { Id = invoice.Id.Value }, transaction);
+
+        var versionInDb =
+            await _connection.ExecuteScalarAsync<int>(GetEventsCountSQL, new { Id = invoice.Id.Value }, transaction);
 
         if (invoice.InitVersion != versionInDb)
         {
@@ -69,7 +70,7 @@ public class InvoiceStore : IInvoiceStore
                 return Result.Failure(saveResult.Error);
             }
         }
-        
+
         transaction.Commit();
         return Result.Success();
     }

@@ -2,10 +2,10 @@ using CSharpFunctionalExtensions;
 
 namespace Domain.ValueObjects;
 
-public class PaymentAmount :ValueObject
+public class PaymentAmount : ValueObject
 {
     private const decimal MinimumAmount = 1;
-    
+
     public decimal Amount { get; protected set; }
 
     private PaymentAmount(decimal amount)
@@ -29,14 +29,14 @@ public class PaymentAmount :ValueObject
         {
             throw new InvalidCastException("Empty line positions");
         }
-        
+
         var positionsAmountRaw = positions.Sum(ex => ex.Quantity * ex.UnitPrice);
-        
+
         var targetAmount = Math.Floor(positionsAmountRaw);
-        
+
         return new PaymentAmount(targetAmount);
     }
-    
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Amount;
